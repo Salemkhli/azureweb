@@ -84,7 +84,7 @@
 
                         <!--name of the url trans.-->
 
-                        <a href="http://localhost:8000/start" class="btn btn-common"> Convert Page </a>
+                        <a href="/start" class="btn btn-common"> Convert Page </a>
                     </div>
                 </div>
             </div>
