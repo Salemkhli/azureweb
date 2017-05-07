@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Session;
 use Exception;
 use Mail;
 use Log;
+use phpDocumentor\Reflection\Types\Null_;
+
 class mapredcontroller extends Controller
 {
 
@@ -30,7 +32,7 @@ class mapredcontroller extends Controller
     public function executeCurl($format, $arg1, $arg2)
     {
         $ch = curl_init();
-
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_URL, "https://convertimage.azurehdinsight.net/templeton/v1/mapreduce/jar");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, "user.name=sshuser&jar=/ams/imageconverter.jar&class=experiments.ConvertImage&define=format=" . $format . "&arg=" . $arg1 . "&arg=" . $arg2);
@@ -59,6 +61,7 @@ class mapredcontroller extends Controller
 
 
            $ch = curl_init();
+           curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
            $url = "https://convertimage.azurehdinsight.net/templeton/v1/jobs/" .$job_id. "?user.name=sshuser";
            curl_setopt($ch, CURLOPT_URL, $url);
            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -87,15 +90,19 @@ class mapredcontroller extends Controller
     public function Acknewledge(){
 
         try{
-            //send email
-            $sEmail=new emailcontroller();
-            $sEmail->defaultSend(
-                Mail::raw('hello this is my new email',function ($message){
-                    $message->from('054409@gmail.com','Big Converter');
-                    $message->to(session()->get('email'));
-                    Log::info('End of email processing');
+            $chekemail=session()->get('email');
+            if(!isEmpty($chekemail)){
+                //send email
+                $sEmail=new emailcontroller();
+                $sEmail->defaultSend(
+                    Mail::raw('hello this is my new email',function ($message){
+                        $message->from('054409@gmail.com','Big Converter');
+                        $message->to(session()->get('email'));
+                        Log::info('End of email processing');
 
-                }));
+                    }));
+            }
+
             return redirect('/start/type/uploadazure/imagetypeform/download');
         }finally{
             $deleteFiles=new azurecontroller();

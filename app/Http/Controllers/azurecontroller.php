@@ -56,14 +56,17 @@ public static $directory_name;
             $deleteFiles=new azurecontroller();
             $deleteFiles->deleteTheUploadedDirectory();
 
-            $sEmail=new emailcontroller();
-            $sEmail->defaultSend(
-                Mail::raw('hello this is my new email',function ($message){
-                    $message->from('054409@gmail.com','Big Converter');
-                    $message->to(session()->get('email'));
-                    Log::info('End of email processing');
+            if (session()->get('email')!=null){
+                $sEmail=new emailcontroller();
+                $sEmail->defaultSend(
+                    Mail::raw('hello this is my new email',function ($message){
+                        $message->from('054409@gmail.com','Big Converter');
+                        $message->to(session()->get('email'));
+                        Log::info('End of email processing');
 
-                }));
+                    }));
+
+            }
         }
     }
 
