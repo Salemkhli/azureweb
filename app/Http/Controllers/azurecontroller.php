@@ -10,7 +10,8 @@ use MicrosoftAzure\Storage\Common\ServicesBuilder;
 use MicrosoftAzure\Storage\Common\ServiceException;
 use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use \ZipArchive as ZipArchive;
-
+use Mail;
+use Log;
 class azurecontroller extends Controller
 {
 public static $ssh;
@@ -32,10 +33,10 @@ public static $directory_name;
      public function getListBlobsOfSubdirectoryToDownload(Request $request){
          $connectionString = $this->getTheConnection();
          $blobRestProxy = ServicesBuilder::getInstance()->createBlobService($connectionString);
-         azurecontroller::$directory_name = $request->session()->get('name');
+         $directory_name = $request->session()->get('id');
          //set the / to subdirectory in container
          $listBlobsOptions=new ListBlobsOptions();
-         $listBlobsOptions->setPrefix(azurecontroller::$directory_name."out");
+         $listBlobsOptions->setPrefix($directory_name.'out_testing/');
         //always the second option parameter to aware of it you get the options in the Models
          $blobs=$blobRestProxy->listBlobs("convertimage-2017-03-29t08-13-29-590z",$listBlobsOptions);
          $return = [
@@ -47,44 +48,70 @@ public static $directory_name;
             $tmp['url'] = $b->getUrl();
             array_push($return['blobs'], $tmp);
         }
-         return view('UploadFiles.listblob')->with(['return'=>$return]);
-                                                                           }
+        try{
+            return view('UploadFiles.listblob')->with(['return'=>$return]);
 
-     //unzip file and upload all files to Azure Storage
-     public function uploadZipFile(Request $request){
-         //set the session for first user
-         $request->session()->flush();
-         $this->setSession($request);
-         //connect to azure
-         $connectionString = $this->getTheConnection();
-         $blobClient = ServicesBuilder::getInstance()->createBlobService($connectionString);
-         //set the user directory
-         $directory_name = session()->get('name');
-         //Extract zip file to Azure Storage
-         $zipfile = $request->file('images');
-         $zip = zip_open($zipfile);
-         if ($zip) {
-      while ($zip_entry = zip_read($zip)) {
-        //the Name is given with zip file name
-        $blob_name=$directory_name.'/'.basename(zip_entry_name($zip_entry));
-        if (zip_entry_open($zip, $zip_entry,'r')) {
-        $contents = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
-        try {
-           //Upload blob
-        $blobClient->createBlockBlob("convertimage-2017-03-29t08-13-29-590z", $blob_name, $contents);
-            } catch(ServiceException $e){
-                 $code = $e->getCode();
-                 $error_message = $e->getMessage();
-                 echo $code.": ".$error_message.PHP_EOL;
-                                            }
-                           zip_entry_close($zip_entry);
-                                                 }
-                                                 }
-             zip_close($zip);
-         }
-         //redirect to form convert page to choose format
-         return redirect('/uploadazure/imagetypeform');
-     }
+        }finally{
+
+            $deleteFiles=new azurecontroller();
+            $deleteFiles->deleteTheUploadedDirectory();
+
+            $sEmail=new emailcontroller();
+            $sEmail->defaultSend(
+                Mail::raw('hello this is my new email',function ($message){
+                    $message->from('054409@gmail.com','Big Converter');
+                    $message->to(session()->get('email'));
+                    Log::info('End of email processing');
+
+                }));
+        }
+    }
+
+    public function typeUpload(){
+        $type=$_POST['typename'];
+        if($type=='zip'){
+            return view('UploadFiles.zip');
+        }if ($type=='files'){
+            return view('UploadFiles.upload');
+        }
+    }
+
+
+    //unzip file and upload all files to Azure Storage
+    public function uploadZipFile(Request $request){
+        //set the session for first user
+        $request->session()->flush();
+        session()->put('id',time());
+        //connect to azure
+        $connectionString = $this->getTheConnection();
+        $blobClient = ServicesBuilder::getInstance()->createBlobService($connectionString);
+        //set the user directory
+        $directory_name = session()->get('id');
+        //Extract zip file to Azure Storage
+        $zipfile = $request->file('images');
+        $zip = zip_open($zipfile);
+        if ($zip) {
+            while ($zip_entry = zip_read($zip)) {
+                //the Name is given with zip file name
+                $blob_name=$directory_name.'/'.basename(zip_entry_name($zip_entry));
+                if (zip_entry_open($zip, $zip_entry,'r')) {
+                    $contents = zip_entry_read($zip_entry,zip_entry_filesize($zip_entry));
+                    try {
+                        //Upload blob
+                        $blobClient->createBlockBlob("convertimage-2017-03-29t08-13-29-590z", $blob_name, $contents);
+                    } catch(ServiceException $e){
+                        $code = $e->getCode();
+                        $error_message = $e->getMessage();
+                        echo $code.": ".$error_message.PHP_EOL;
+                    }
+                    zip_entry_close($zip_entry);
+                }
+            }
+            zip_close($zip);
+        }
+        //redirect to form convert page to choose format
+        return redirect('start/type/uploadazure/imagetypeform');
+    }
 
   //Download couple of files AS Zip file
   public function downloadFilesAsZipFile(Request $request){
@@ -95,7 +122,7 @@ public static $directory_name;
 
       //set the getting listing files option "Setting the prefixes is the point", session + "out"
       $listBlobsOptions=new ListBlobsOptions();
-      $listBlobsOptions->setPrefix($directory_name."out");
+      $listBlobsOptions->setPrefix($directory_name."out/");
 
       //Spesfi the Azure container and get the list options you have setting
       $blobs=$blobRestProxy->listBlobs("convertimage-2017-03-29t08-13-29-590z",$listBlobsOptions);
@@ -122,7 +149,15 @@ public static $directory_name;
           $code = $e->getCode();
           $error_message = $e->getMessage();
           echo $code . ": " . $error_message . "<br />";
+      }finally{
+
+          //delete all files that has been downloaded
+          $deleteFiles=new azurecontroller();
+          $deleteFiles->deleteTheDownloadedDirectory();
+
+
       }
+      return redirect('/');
 
   }
 
@@ -139,22 +174,24 @@ public static $directory_name;
                 $directory_name = session()->get('id');
                //here start process of uploading files
                 $files = $request->file('images');
-                //process and pull all files from the stack
-                foreach ($files as $file) {
-                $blob_name = $directory_name . '/' . $file->getClientOriginalName();
-                $content = file_get_contents($file);
-                try {
-                    //Upload blob
-                    $blobClient->createBlockBlob("userfiles", $blob_name, $content);
-                } catch (ServiceException $e) {
-                    $code = $e->getCode();
-                    $error_message = $e->getMessage();
-                    echo $code . ": " . $error_message . PHP_EOL;
+
+                    //process and pull all files from the stack
+                    foreach ($files as $file) {
+                        $blob_name = $directory_name . '/' . $file->getClientOriginalName();
+                        $content = file_get_contents($file);
+                        try {
+                            //Upload blob
+                            $blobClient->createBlockBlob("convertimage-2017-03-29t08-13-29-590z", $blob_name, $content);
+                        } catch (ServiceException $e) {
+                            $code = $e->getCode();
+                            $error_message = $e->getMessage();
+                            echo $code . ": " . $error_message . PHP_EOL;
+                        }
                 }
 
-            }
+
         //redirect to form convert page to choose format
-    return redirect('uploadazure/imagetypeform');
+    return redirect('start/type/uploadazure/imagetypeform');
     }
 
 
@@ -173,11 +210,30 @@ public static $directory_name;
         $directory_name = session()->get('id');
         //set the getting listing files option "Setting the prefixes is the point", session + "out"
         $listBlobsOptions=new ListBlobsOptions();
-        $listBlobsOptions->setPrefix( $directory_name);
+        $listBlobsOptions->setPrefix($directory_name.'/');
 
         //Spesfi the Azure container and get the list options you have setting
         $blobs=$blobRestProxy->listBlobs("convertimage-2017-03-29t08-13-29-590z",$listBlobsOptions);
          //To get the blob its self and delete every blob there by container name
+        foreach ($blobs->getBlobs() as $blob){
+
+            $blobRestProxy->deleteBlob("convertimage-2017-03-29t08-13-29-590z",$blob->getName());
+        }
+
+    }
+    public function deleteTheDownloadedDirectory(){
+        //setting the connection to azure storage
+        $connectionString = $this->getTheConnection();
+        $blobRestProxy = ServicesBuilder::getInstance()->createBlobService($connectionString);
+        //azurecontroller::$directory_name = $request->session()->get('name');
+        $directory_name = session()->get('id');
+        //set the getting listing files option "Setting the prefixes is the point", session + "out"
+        $listBlobsOptions=new ListBlobsOptions();
+        $listBlobsOptions->setPrefix( $directory_name.'out');
+
+        //Spesfi the Azure container and get the list options you have setting
+        $blobs=$blobRestProxy->listBlobs("convertimage-2017-03-29t08-13-29-590z",$listBlobsOptions);
+        //To get the blob its self and delete every blob there by container name
         foreach ($blobs->getBlobs() as $blob){
 
             $blobRestProxy->deleteBlob("convertimage-2017-03-29t08-13-29-590z",$blob->getName());

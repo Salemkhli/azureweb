@@ -36,7 +36,7 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="waleed.blade.php">Home</a></li>
+                        <li class="active"><a href="/">Home</a></li>
                         <li class="dropdown"><a href="#">Pages <i class="fa fa-angle-down"></i></a>
                             <ul role="menu" class="sub-menu">
                                 <li><a href="aboutus.html">About</a></li>
@@ -95,7 +95,7 @@
 						</li>
 
 						<li role="presentation" class="disabled">
-							<a href="/uploadazure/imagetypeform" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
+							<a href="/" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
 								<span class="round-tab">
 									<i class="glyphicon glyphicon-pencil"></i>
 								</span>
@@ -127,7 +127,7 @@
 						@yield('upload')
 						</div>
 						<div class="tab-pane" role="tabpanel" id="step2">
-
+						@yield('format')
 						</div>
 
 						<div class="tab-pane" role="tabpanel" id="step3">

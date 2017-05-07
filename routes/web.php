@@ -1,49 +1,26 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-
-/*Route::get('/', function () {
-    return view('layout.waleed');
-});*/
-
-/*Route::get("start",function (){
-    return view('layout.uploudpage');
-});*/
+//go home page
 Route::get('/', function () {                                                                         //0
     return view('layout.waleed');
 });
-
-
+//get started to upload images
 Route::get('start', function () {                                                                         //0
-    return view('UploadFiles.upload');
+    return view('UploadFiles.typeup');
 });
-
-//Route::get('test','mapredcontroller@getProgress');
-
-
-//Route::get('test2','azurecontroller@downlodFromHDFS');
-
-//Route::post('start/uploadazure','azurecontroller@uploadFromWebToHDFS'); //1
-
-Route::post('uploadazure','azurecontroller@uploadFromWebToHDFS');                            //1
-Route::get('uploadazure/imagetypeform','azurecontroller@chooseImagesTypeForm');             //2
-
-//Route::get('delete','azurecontroller@deleteTheUploadedDirectory');
-Route::post('uploadazure/imagetypeform/convert','mapredcontroller@submitJobToCluster'); //3
-Route::get('uploadazure/imagetypeform/progress','mapredcontroller@getProgress');       //4
-Route::get('list', 'azurecontroller@getListBlobsOfSubdirectoryToDownload');           //5
-
-//Route::post('uploadazure/imagetypeform/convert/progress','mapredcontroller@getProgress');//4
-
-//Route::get('downloadazure','azurecontroller@downlodFromHDFS');
+Route::post('start/type','azurecontroller@typeUpload');
+//type of uploading file
+Route::post('start/type/uploadazure','azurecontroller@uploadFromWebToHDFS');
+Route::post('/start/type/uploadzip','azurecontroller@uploadZipFile');
+//choose the type image
+Route::get('start/type/uploadazure/imagetypeform','azurecontroller@chooseImagesTypeForm');
+//integrate with hadoop
+Route::post('/start/type/uploadazure/imagetypeform/convert','mapredcontroller@submitJobToCluster');
+//get progress by job Id
+Route::get('/start/type/uploadazure/imagetypeform/progress','mapredcontroller@getProgress');
+Route::get('/start/type/uploadazure/imagetypeform/progress/ack','mapredcontroller@Acknewledge');
+//show the download page of files as zip or file by file
+Route::get('/start/type/uploadazure/imagetypeform/download', 'azurecontroller@getListBlobsOfSubdirectoryToDownload');           //5
+Route::get('/start/type/uploadazure/imagetypeform/downloadzip','azurecontroller@downloadFilesAsZipFile');
+//send email to user when the images are converted
+Route::get('send','emailcontroller@defaultSend');

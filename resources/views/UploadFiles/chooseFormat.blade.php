@@ -5,13 +5,13 @@
         <div class="step_21">
             <div class="row">
 
-                <form action='uploadazure/imagetypeform/convert' method="post" enctype="multipart/form-data">
+                <form action='imagetypeform/convert' method="post" enctype="multipart/form-data">
                     <div class="row mar_ned">
                         <div class="col-md-4 col-xs-3">
                             <p align="right"><stong>Image Formats</stong></p>
                         </div>
                         <div class="col-md-8 col-xs-9">
-                            <select name="formatname" id="highest_qualification" class="dropselectsec">
+                            <select name="formatname" id="highest_qualification" class="dropselectsec" required>
                                 <option value=""> Select the format you want to convert to</option>
                                 <option value="bmp">BMP</option>
                                 <option value="gif">GIF</option>
@@ -23,6 +23,7 @@
                         </div>
                     </div>
 
+{{--
                     <div class="row mar_ned">
                         <div class="col-md-4 col-xs-3">
                             <p align="right"><stong>Save file to</stong></p>
@@ -39,22 +40,25 @@
                             </label>
                         </div>
                     </div>
+--}}
 
                     <div class="row mar_ned">
                         <div class="col-md-4 col-xs-3 form-group row has-success">
                             <p align="right"><stong>Notify me when it is finished</stong></p>
                         </div>
                         <div class="col-md-8 col-xs-9">
-                            <input type="Email" name="Emil" placeholder="Enter youe Email" class="Email" autocomplete="off">
+                            <input type="Email" name="Emil" placeholder="Enter youe Email" class="Email" autocomplete="on">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <div class="row mar_ned"></div>
+                      <div class="container">
+                        <div  id = "pbarmain" style="display: none" class="progress progress-striped active">
+                            <div id = "pbar" class="progress-bar"></div>
+                        </div>
+                        <button type="submit"  class="btn btn-default" >Convert</button>
+
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-    <ul class="list-inline pull-right">
-        <li><button type="button" class="btn btn-submit next-step">continue</button></li>
-    </ul>
     @endsection

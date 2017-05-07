@@ -176,54 +176,67 @@ $(document).ready(function()
             });
           }
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-var i = 0;
+//var i = 0;<
 $(document).ready(function() {
+
     $("#reset").click(function() {
         $(':input','#attachmentModal').val("");
         $("#pbarmain").hide();
         $("#pbar").hide();
         $(".progress-bar").css("width", "0%");
-        i = 0;
+
+        //i = 0;
     });
 });
-function makeProgress(){
+function timedRefresh(timeoutPeriod) {
+    setTimeout("location.reload(true);",timeoutPeriod);
+}
+    function makeProgress(i){
   $("#pbarmain").show();
   $("#pbar").show();
+
     if(i < 100){
-    i = i + 4;
+        //location.reload();
+    i = i+0;
     $(".progress-bar").css("width", i + "%").text(i + " %");
     setTimeout("makeProgress()", 100);
   }
+
 }
+setInterval(function () {
+    document.getElementById("myButtonId").click();
+    document.getElementById('myButtonId').style.visibility = 'hidden';
+
+
+}, 1000);
+
