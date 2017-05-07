@@ -55,7 +55,7 @@
                             <li><a href="blog.html">Blog Default</a></li>
                             <li><a href="blogtwo.html">Timeline Blog</a></li>
                             <li><a href="blogone.html">2 Columns + Right Sidebar</a></li>
-                            <li><a href="blogthree.html">1 Column + Left Sidebar</a></li>
+                            <li><a href="blogthree.html"> Column + Left Sidebar</a></li>
                             <li><a href="blogfour.html">Blog Masonary</a></li>
                             <li><a href="blogdetails.html">Blog Details</a></li>
                         </ul>
@@ -82,7 +82,7 @@
    <a href="/start/type/uploadazure/imagetypeform/downloadzip" download><h2>Download All Files As Zip</h2></a>
     <br>
     @foreach($u=$return['blobs'] as $value)
-        <p><a href="{{print_r($value['url'])}}" download>{{print_r(basename($value['url']))}}</a></p>
+        <p><a href="{{$value['url']}}" download>{{basename($value['url'])}}</a></p>
         <br>
 
         <br>

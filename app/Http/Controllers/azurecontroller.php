@@ -56,7 +56,7 @@ public static $directory_name;
             $deleteFiles=new azurecontroller();
             $deleteFiles->deleteTheUploadedDirectory();
 
-            if (session()->get('email')!=null){
+            if (session()->get('email') !=null){
                 $sEmail=new emailcontroller();
                 $sEmail->defaultSend(
                     Mail::raw('hello this is my new email',function ($message){
