@@ -24,3 +24,9 @@ Route::get('/start/type/uploadazure/imagetypeform/download', 'azurecontroller@ge
 Route::get('/start/type/uploadazure/imagetypeform/downloadzip','azurecontroller@downloadFilesAsZipFile');
 //send email to user when the images are converted
 Route::get('send','emailcontroller@defaultSend');
+Route::get('about',function (){
+   return view('UploadFiles.about');
+});
+Route::get('contact',function (){
+    return view('UploadFiles.contact');
+});

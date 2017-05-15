@@ -22,6 +22,7 @@
 </head><!--/head-->
 
 <body>
+
 	<header id="header">      
         <div class="navbar navbar-inverse" role="banner">
             <div class="container">
@@ -37,38 +38,8 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="active"><a href="/">Home</a></li>
-                        <li class="dropdown"><a href="#">Pages <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="aboutus.html">About</a></li>
-                                <li><a href="aboutus2.html">About 2</a></li>
-                                <li><a href="service.html">Services</a></li>
-                                <li><a href="pricing.html">Pricing</a></li>
-                                <li><a href="contact.html">Contact us</a></li>
-                                <li><a href="contact2.html">Contact us 2</a></li>
-                                <li><a href="404.html">404 error</a></li>
-                                <li><a href="coming-soon.html">Coming Soon</a></li>
-                            </ul>
-                        </li>                    
-                        <li class="dropdown"><a href="blog.html">Blog <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="blog.html">Blog Default</a></li>
-                                <li><a href="blogtwo.html">Timeline Blog</a></li>
-                                <li><a href="blogone.html">2 Columns + Right Sidebar</a></li>
-                                <li><a href="blogthree.html">1 Column + Left Sidebar</a></li>
-                                <li><a href="blogfour.html">Blog Masonary</a></li>
-                                <li><a href="blogdetails.html">Blog Details</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="portfolio.html">Portfolio <i class="fa fa-angle-down"></i></a>
-                            <ul role="menu" class="sub-menu">
-                                <li><a href="portfolio.html">Portfolio Default</a></li>
-                                <li><a href="portfoliofour.html">Isotope 3 Columns + Right Sidebar</a></li>
-                                <li><a href="portfolioone.html">3 Columns + Right Sidebar</a></li>
-                                <li><a href="portfoliotwo.html">3 Columns + Left Sidebar</a></li>
-                                <li><a href="portfoliothree.html">2 Columns</a></li>
-                                <li><a href="portfolio-details.html">Portfolio Details</a></li>
-                            </ul>
-                        </li>                         
+                        <li class="dropdown"><a href="/about">About us</a></li>
+                        <li class="dropdown"><a href="/contact">Contact us </a></li>
                     </ul>
                 </div>
             </div>
@@ -82,42 +53,7 @@
 		<div class="row">
 			<section>
 			<div class="wizard">
-				<div class="wizard-inner">
-					<div class="connecting-line"></div>
-					<ul class="nav nav-tabs" role="tablist">
-
-						<li role="presentation" class="active">
-							<a href="/start" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
-								<span class="round-tab">
-									<i class="glyphicon glyphicon-folder-open"></i>
-								</span>
-							</a>
-						</li>
-
-						<li role="presentation" class="disabled">
-							<a href="/" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
-								<span class="round-tab">
-									<i class="glyphicon glyphicon-pencil"></i>
-								</span>
-							</a>
-						</li>
-						<li role="presentation" class="disabled">
-							<a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="Step 3">
-								<span class="round-tab">
-									<i class="glyphicon glyphicon-picture"></i>
-								</span>
-							</a>
-						</li>
-
-						<li role="presentation" class="disabled">
-							<a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Complete">
-								<span class="round-tab">
-									<i class="glyphicon glyphicon-ok"></i>
-								</span>
-							</a>
-						</li>
-					</ul>
-				</div>
+				@yield('uploadicon')
 
 
 					<div class="tab-content">
@@ -126,7 +62,7 @@
 
 						@yield('upload')
 						</div>
-						<div class="tab-pane" role="tabpanel" id="step2">
+						<div class="tab-pane " role="tabpanel" id="step2">
 						@yield('format')
 						</div>
 
@@ -139,15 +75,12 @@
 
 
 						<div class="tab-pane" role="tabpanel" id="complete">
-							<div class="step44">
-								<h5>Completed</h5>
+                            @yield('download')
 
-
-							</div>
 						</div>
 						<div class="clearfix"></div>
 					</div>
-			 </div>
+			  </div>
 		</section>
 	   </div>
 	</div>
@@ -155,23 +88,7 @@
 
 
     <footer id="footer">
-        <div class="container">
-            <h2>Send a message</h2>
-            <form id="main-contact-form" name="contact-form" method="post" action="sendemail.php">
-                 <div class="form-group">
-                                <input type="text" name="name" class="form-control" required="required" placeholder="Name">
-                            </div>
-                            <div class="form-group">
-                                <input type="email" name="email" class="form-control" required="required" placeholder="Email Id">
-                            </div>
-                            <div class="form-group">
-                                <textarea name="message" id="message" required="required" class="form-control" rows="8" placeholder="Your text here"></textarea>
-                            </div>
-                 <div class="form-group">
-					<input type="submit" name="submit" class="btn btn-submit" value="Submit">
-                 </div>
-            </form>
-        </div>
+
     </footer>
     <!--/#footer-->
 

@@ -13,19 +13,9 @@
                 </select>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <p align="right"><button type="submit" class="btn btn-primary">Submit</button></p>
             <div class="row mar_ned"></div>
         </div>
     </form>
 
-    <script>
-        function checksubmit() {
-            var g=document.forms['myform']['typename'].value;
-            if (g==""){
-
-                alert('the type files uploaded must be chosen');
-                return false;
-            }
-        }
-    </script>
     @endsection

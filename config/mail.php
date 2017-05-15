@@ -26,10 +26,10 @@ return [
     | Here you may provide the host address of the SMTP server used by your
     | applications. A default option is provided that is compatible with
     | the Mailgun mail service which will provide reliable deliveries.
-    |
+    |smtp.mailgun.org
     */
 
-    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+    'host' => env('MAIL_HOST', 'smtp.sendgrid.net'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', '054409@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'bigData'),
     ],
 
     /*
@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME'),
+    'username' => env('khli'),
 
-    'password' => env('MAIL_PASSWORD'),
+    'password' => env('QAZqaz123'),
 
     /*
     |--------------------------------------------------------------------------
