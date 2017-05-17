@@ -61,25 +61,6 @@
                         </div>
                     </div>
 
-{{--
-                    <div class="row mar_ned">
-                        <div class="col-md-4 col-xs-3">
-                            <p align="right"><stong>Save file to</stong></p>
-                        </div>
-                        <div class="col-md-8 col-xs-9">
-                            <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option1"> A
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option2"> B
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> C
-                            </label>
-                        </div>
-                    </div>
---}}
-
                     <div class="row mar_ned">
                         <div class="col-md-4 col-xs-3 form-group row has-success">
                             <p align="right"><stong>Notify me when it is finished</stong></p>

@@ -84,8 +84,8 @@
     <script language="javascript" type="text/javascript">
 
               function wait() {
-                //  alert("gooh");
-               //   $("#loading").append("<img id='loading-image' style='position: absolute; top: 100px;left: 240px;z-index: 100;' src='/images/Preloader_8.gif'  />");
+
+         $("#loading").append("<img id='loading-image' style='position: absolute; top: 100px;left: 240px;z-index: 100;' src='/images/Preloader_8.gif'  />");
 
 
 

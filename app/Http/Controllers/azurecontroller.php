@@ -125,7 +125,7 @@ public static $directory_name;
 
       //set the getting listing files option "Setting the prefixes is the point", session + "out"
       $listBlobsOptions=new ListBlobsOptions();
-      $listBlobsOptions->setPrefix($directory_name."out/");
+      $listBlobsOptions->setPrefix($directory_name."out_testing/");
 
       //Spesfi the Azure container and get the list options you have setting
       $blobs=$blobRestProxy->listBlobs("convertimage-2017-03-29t08-13-29-590z",$listBlobsOptions);
@@ -174,7 +174,7 @@ public static $directory_name;
                $connectionString = $this->getTheConnection();
                $blobClient = ServicesBuilder::getInstance()->createBlobService($connectionString);
                //set the user directory
-                $directory_name = session()->get('id');
+                $directory_name =session()->get('id');
                //here start process of uploading files
                 $files = $request->file('images');
 
