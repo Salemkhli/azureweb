@@ -36,12 +36,13 @@ public static $directory_name;
          $directory_name = $request->session()->get('id');
          //set the / to subdirectory in container
          $listBlobsOptions=new ListBlobsOptions();
+         //unique
          $listBlobsOptions->setPrefix($directory_name.'out_testing/');
         //always the second option parameter to aware of it you get the options in the Models
          $blobs=$blobRestProxy->listBlobs("convertimage-2017-03-29t08-13-29-590z",$listBlobsOptions);
          $return = [
-             'blobs' => [],
-         ];
+              'blobs' => [],
+                  ];
         foreach ($blobs->getBlobs() as $k => $b) {
             $tmp = [];
             $tmp['name'] = $b->getName();
@@ -52,9 +53,7 @@ public static $directory_name;
             return view('UploadFiles.listblob')->with(['return'=>$return]);
 
         }finally{
-
-            $deleteFiles=new azurecontroller();
-            $deleteFiles->deleteTheUploadedDirectory();
+            
 
             if (session()->get('email') !=null){
                 $sEmail=new emailcontroller();
@@ -71,6 +70,7 @@ public static $directory_name;
     }
 
     public function typeUpload(){
+
         $type=$_POST['typename'];
         if($type=='zip'){
             return view('UploadFiles.zip');
@@ -132,7 +132,7 @@ public static $directory_name;
 
       //Start create the Zip file to upload files in it
       $zip=new ZipArchive();
-      $zipName='images.zip';
+      $zipName=$directory_name.'.zip';
       $zip->open($zipName,ZipArchive::CREATE);
 
       //To get the blob its self and create zip file to keep it in !!
@@ -152,15 +152,10 @@ public static $directory_name;
           $code = $e->getCode();
           $error_message = $e->getMessage();
           echo $code . ": " . $error_message . "<br />";
-      }finally{
 
-          //delete all files that has been downloaded
-          $deleteFiles=new azurecontroller();
-          $deleteFiles->deleteTheDownloadedDirectory();
-
-
+          //Delete the converted files
       }
-      return redirect('/');
+
 
   }
 
@@ -174,12 +169,12 @@ public static $directory_name;
                $connectionString = $this->getTheConnection();
                $blobClient = ServicesBuilder::getInstance()->createBlobService($connectionString);
                //set the user directory
-                $directory_name =session()->get('id');
+               $directory_name =session()->get('id');
                //here start process of uploading files
-                $files = $request->file('images');
+               $files = $request->file('images');
 
-                    //process and pull all files from the stack
-                    foreach ($files as $file) {
+                        //process and pull all files from the stack
+                        foreach ($files as $file) {
                         $blob_name = $directory_name . '/' . $file->getClientOriginalName();
                         $content = file_get_contents($file);
                         try {
@@ -232,7 +227,8 @@ public static $directory_name;
         $directory_name = session()->get('id');
         //set the getting listing files option "Setting the prefixes is the point", session + "out"
         $listBlobsOptions=new ListBlobsOptions();
-        $listBlobsOptions->setPrefix( $directory_name.'out');
+        $listBlobsOptions->setPrefix( $directory_name.'out_testing
+        ');
 
         //Spesfi the Azure container and get the list options you have setting
         $blobs=$blobRestProxy->listBlobs("convertimage-2017-03-29t08-13-29-590z",$listBlobsOptions);
